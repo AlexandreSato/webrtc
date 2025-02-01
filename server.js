@@ -1,9 +1,10 @@
 const express = require('express');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const HTTPS_PORT = 8443; // Porta HTTPS
 
 // Middleware para servir arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
@@ -44,7 +45,13 @@ app.post('/criar-arquivo', (req, res) => {
     });
 });
 
-// Inicia o servidor
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
+// Carrega o certificado e a chave privada
+const options = {
+    key: fs.readFileSync(path.join(__dirname, 'key.pem')),
+    cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
+};
+
+// Cria o servidor HTTPS com o app do Express
+https.createServer(options, app).listen(HTTPS_PORT, '0.0.0.0', () => {
+    console.log(`Servidor HTTPS rodando na porta ${HTTPS_PORT}`);
 });

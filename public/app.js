@@ -189,18 +189,33 @@ async function joinRoomById(roomId) {
 }
 
 async function openUserMedia(e) {
-  const stream = await navigator.mediaDevices.getUserMedia(
-      {video: true, audio: true});
-  document.querySelector('#localVideo').srcObject = stream;
-  localStream = stream;
-  remoteStream = new MediaStream();
-  document.querySelector('#remoteVideo').srcObject = remoteStream;
+ try {
+    // Verifica dispositivos disponíveis
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const hasVideo = devices.some(device => device.kind === 'videoinput');
+    const hasAudio = devices.some(device => device.kind === 'audioinput');
 
-  console.log('Stream:', document.querySelector('#localVideo').srcObject);
-  document.querySelector('#cameraBtn').disabled = true;
-  document.querySelector('#joinBtn').disabled = false;
-  document.querySelector('#createBtn').disabled = false;
-  document.querySelector('#hangupBtn').disabled = false;
+    if (!hasVideo || !hasAudio) {
+      alert('Câmera ou microfone não encontrados.');
+      throw new Error('Câmera ou microfone não encontrados.');
+    }
+
+    const stream = await navigator.mediaDevices.getUserMedia(
+      {video: true, audio: true});
+    document.querySelector('#localVideo').srcObject = stream;
+    localStream = stream;
+    remoteStream = new MediaStream();
+    document.querySelector('#remoteVideo').srcObject = remoteStream;
+
+    console.log('Stream:', document.querySelector('#localVideo').srcObject);
+    document.querySelector('#cameraBtn').disabled = true;
+    document.querySelector('#joinBtn').disabled = false;
+    document.querySelector('#createBtn').disabled = false;
+    document.querySelector('#hangupBtn').disabled = false;
+ } catch (error) {
+    console.error('Erro ao acessar dispositivos de mídia:', error);
+    alert('Não foi possível acessar a câmera ou o microfone. Verifique as permissões e tente novamente.');
+ }
 }
 
 async function hangUp(e) {

@@ -8,6 +8,8 @@
 <body>
     <h1>Criar Arquivo no Servidor</h1>
     <button id="criarArquivo">Criar Arquivo</button>
+    
+    <button onclick="location.href='/webrtc'" type="button">webRTC</button>
 
     <script>
         // Seleciona o botão pelo ID
@@ -22,7 +24,8 @@
 
             try {
                 // Envia uma solicitação POST para o servidor
-                const resposta = await fetch('http://localhost:3000/criar-arquivo', {
+                // const resposta = await fetch('https://localhost:8443/criar-arquivo', {
+                const resposta = await fetch('/criar-arquivo', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
