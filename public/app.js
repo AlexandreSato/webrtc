@@ -61,11 +61,26 @@ async function createRoom() {
   console.log('Created offer:', offer);
 
   const roomWithOffer = {
-    'offer': {
+    nomeArquivo: 'sdp-offer.json',
+    conteudo: {
       type: offer.type,
       sdp: offer.sdp,
     },
   };
+
+  try {
+    const resposta = await fetch('/criar-arquivo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(roomWithOffer)
+    });
+    const resultado = await resposta.json();
+    console.log(resultado.mensagem);
+  } catch (erro) {
+    console.error('Erro ao criar o arquivo:', erro);
+  }
 //   await roomRef.set(roomWithOffer);
 //   roomId = roomRef.id;
   roomId = 777;

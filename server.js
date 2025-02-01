@@ -34,7 +34,7 @@ app.post('/criar-arquivo', (req, res) => {
     const caminhoArquivo = path.join(__dirname, nomeArquivo);
 
     // Escreve o arquivo no sistema de arquivos
-    fs.writeFile(caminhoArquivo, conteudo, (err) => {
+    fs.writeFile(caminhoArquivo, JSON.stringify(conteudo), (err) => {
         if (err) {
             console.error('Erro ao criar o arquivo:', err);
             return res.status(500).json({ mensagem: 'Erro ao criar o arquivo.' });
