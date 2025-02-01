@@ -3,20 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo de Botão com JS</title>
+    <title>Criar Arquivo no Servidor</title>
 </head>
 <body>
-    <h1>Clique no Botão</h1>
-    <button id="meuBotao">Clique aqui</button>
+    <h1>Criar Arquivo no Servidor</h1>
+    <button id="criarArquivo">Criar Arquivo</button>
 
     <script>
         // Seleciona o botão pelo ID
-        const botao = document.getElementById('meuBotao');
+        const botao = document.getElementById('criarArquivo');
 
         // Adiciona um evento de clique ao botão
-        botao.addEventListener('click', function() {
-            // Exibe uma mensagem no console
-            console.log('Botão clicado!');
+        botao.addEventListener('click', async () => {
+            const dados = {
+                nomeArquivo: 'arquivo.txt', // Nome do arquivo
+                conteudo: 'Este é o conteúdo do arquivo criado no servidor!' // Conteúdo do arquivo
+            };
+
+            try {
+                // Envia uma solicitação POST para o servidor
+                const resposta = await fetch('http://localhost:3000/criar-arquivo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                });
+
+                const resultado = await resposta.json();
+                console.log(resultado.mensagem); // Exibe a mensagem do servidor no console
+            } catch (erro) {
+                console.error('Erro ao criar o arquivo:', erro);
+            }
         });
     </script>
 </body>
